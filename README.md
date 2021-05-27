@@ -17,7 +17,7 @@ updates manually.
 
 ## Installation
 
-1. Download `composer create-project --prefer-dist bor-attila/cakephp-app2 [directory]`.
+1. Download `composer create-project --prefer-dist bor-attila/cakephp-app2:dev-main [directory]`.
 2. Start your webserver.
 
 You can now either use your machine's webserver, or you can use Vagrant
