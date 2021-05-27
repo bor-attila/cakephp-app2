@@ -14,6 +14,7 @@ webroot/node_modules/*
 webroot/css/*.min.css
 webroot/js/*.min.js
 .vagrant/*
+webroot/yarn-error.log
 
 # OS generated files #
 ######################
