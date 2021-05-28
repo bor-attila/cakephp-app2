@@ -6,7 +6,7 @@
  * into source code version control.
  */
 return [
-    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
     'Security' => [
         'salt' => env('SECURITY_SALT', '__SALT__'),
