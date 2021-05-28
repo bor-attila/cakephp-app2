@@ -6,12 +6,34 @@
  * into source code version control.
  */
 return [
+    /*
+     * Debug Level:
+     *
+     * Production Mode:
+     * false: No error messages, errors, or warnings shown.
+     *
+     * Development Mode:
+     * true: Errors and warnings shown.
+     */
     'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
+    /*
+     * Security and encryption configuration
+     *
+     * - salt - A random string used in security hashing methods.
+     *   The salt value is also used as the encryption key.
+     *   You should treat it as extremely sensitive data.
+     */
     'Security' => [
         'salt' => env('SECURITY_SALT', '__SALT__'),
     ],
 
+    /*
+     * Connection information used by the ORM to connect
+     * to your application's datastores.
+     *
+     * The default settings point to Vagrant machine.
+     */
     'Datasources' => [
         'default' => [
             'host' => 'localhost',
@@ -29,10 +51,5 @@ return [
             'database' => 'test_vagrant',
             'url' => env('DATABASE_TEST_URL', null),
         ],
-    ],
-
-    'Session' => [
-        'defaults' => 'cake',
-        'cookie' => 's',
     ],
 ];

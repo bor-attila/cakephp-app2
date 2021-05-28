@@ -405,7 +405,8 @@ return [
      * To use database sessions, load the SQL file located at config/schema/sessions.sql
      */
     'Session' => [
-        'defaults' => 'php',
+        'defaults' => 'cake',
+        'cookie' => 's',
     ],
 
     /**
@@ -414,5 +415,6 @@ return [
     'DebugKit' => [
         'enabled' => filter_var(env('DEBUG_KIT_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
         'forceEnable' => filter_var(env('DEBUG_KIT_FORCE_ENABLE', false), FILTER_VALIDATE_BOOLEAN),
+        'ignoreAuthorization' => filter_var(env('DEBUG_KIT_IGNORE_AUTHORIZATION', true), FILTER_VALIDATE_BOOLEAN),
     ]
 ];
