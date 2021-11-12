@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace App\View;
 
 use Cake\View\View;
-use PhpToJavascript\View\Helper\PhpToJavascriptHelper;
 
 /**
  * Application View
@@ -24,7 +23,6 @@ use PhpToJavascript\View\Helper\PhpToJavascriptHelper;
  * Your application's default view class
  *
  * @link https://book.cakephp.org/4/en/views.html#the-app-view
- * @property PhpToJavascriptHelper $PhpToJavascript
  */
 class AppView extends View
 {
@@ -39,6 +37,5 @@ class AppView extends View
      */
     public function initialize(): void
     {
-        $this->loadHelper('PhpToJavascript.PhpToJavascript');
     }
 }

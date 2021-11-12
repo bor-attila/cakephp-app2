@@ -3,8 +3,9 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - '4.x'
       - '4.next'
+      - '5.x'
   pull_request:
     branches:
       - '*'
@@ -15,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.2', '7.4', '8.0']
+        php-version: ['7.2', '7.4', '8.0', '8.1']
     name: PHP ${{ matrix.php-version }}
 
     steps:
@@ -25,21 +26,24 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
-        extensions: mbstring, intl, pdo_sqlite, pdo_mysql
+        extensions: mbstring, intl, pdo_sqlite
         coverage: none
 
     - name: Composer install
       run: |
-        if [[ ${{ matrix.php-version }} == '8.0' ]]; then
-          composer install --ignore-platform-reqs
+        if [[ ${{ matrix.php-version }} == '8.1' ]]; then
+          composer update --ignore-platform-reqs
         else
-          composer install
+          composer update
         fi
         composer run-script post-install-cmd --no-interaction
 
     - name: Run PHPUnit
       run: |
-          vendor/bin/phpunit
+        cp config/app_local.example.php config/app_local.php
+        vendor/bin/phpunit
+      env:
+        DATABASE_TEST_URL: sqlite://./testdb.sqlite
 
   coding-standard:
     name: Coding Standard

@@ -53,8 +53,6 @@ This repository contains the following changes compared to [CakePHP App](https:/
 * Added [Authorization plugin](https://book.cakephp.org/authorization/2/en/index.html)
 * Added [dotenv](https://github.com/josegonzalez/php-dotenv) for development
 * Added [PHP to Javascript](https://github.com/bor-attila/cakephp-ptj)
-* Added __friendsofcake/bootstrap-ui__ as suggested package
-* Added __burzum/cakephp-service-layer__ as suggested package
 
 ### Changes in _webroot_
 
@@ -70,7 +68,6 @@ This repository contains the following changes compared to [CakePHP App](https:/
 ### General changes
 
 * The default template was modified
-* The login points to _Users::login_, and logout points to _Users::logout_
 * The Authorization plugin was added to middleware queue with *requireAuthorizationCheck* set to *false*
 * The Authentication plugin was added to middleware queue
 * Added Css helper

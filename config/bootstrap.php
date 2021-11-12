@@ -31,6 +31,8 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
+require __DIR__ . DS . 'config_loader.php';
+
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
@@ -45,77 +47,6 @@ use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
-
-$cached_config = null;
-$cached_config_key = sprintf('__%s_configuration__', env('APP_NAME', 'myapp'));
-if (filter_var(env('APP_CACHE_CONFIG', false), FILTER_VALIDATE_BOOLEAN)) {
-    $cached_config = apc_fetch($cached_config_key);
-}
-
-if (!$cached_config) {
-    /*
-     * See https://github.com/josegonzalez/php-dotenv for API details.
-     *
-     * Uncomment block of code below if you want to use `.env` file during development.
-     * You should copy `config/.env.example` to `config/.env` and set/modify the
-     * variables as required.
-     *
-     * The purpose of the .env file is to emulate the presence of the environment
-     * variables like they would be present in production.
-     *
-     * If you use .env files, be careful to not commit them to source control to avoid
-     * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
-     * for more information for recommended practices.
-    */
-    if (file_exists(CONFIG . '.env')) {
-        $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-        $dotenv->parse()
-            ->putenv(true)
-            ->toEnv()
-            ->toServer();
-    }
-
-    /*
-     * Read configuration file and inject configuration into various
-     * CakePHP classes.
-     *
-     * By default there is only one configuration file. It is often a good
-     * idea to create multiple configuration files, and separate the configuration
-     * that changes from configuration that does not. This makes deployment simpler.
-     */
-    try {
-        Configure::config('default', new PhpConfig());
-        Configure::load('app', 'default', false);
-    } catch (\Exception $e) {
-        exit($e->getMessage() . "\n");
-    }
-
-    /*
-     * Load an environment local configuration file to provide overrides to your configuration.
-     * Notice: For security reasons app_local.php **should not** be included in your git repo.
-     */
-    if (file_exists(CONFIG . 'app_local.php')) {
-        Configure::load('app_local', 'default');
-    }
-
-    if (file_exists(CONFIG . 'app_secret.php')) {
-        Configure::load('app_secret', 'default');
-    }
-
-    $additional_config_file = env('APP_ADDITIONAL_CONFIG', false);
-    if ($additional_config_file && file_exists($additional_config_file)) {
-        $filename = time() . 'additional_config';
-        copy($additional_config_file, CONFIG . $filename . '.php');
-        Configure::load($filename, 'default');
-        unlink(CONFIG . $filename . '.php');
-    }
-
-    $cached_config = Configure::read();
-}
-
-if (filter_var(env('APP_CACHE_CONFIG', false), FILTER_VALIDATE_BOOLEAN)) {
-    apc_store($cached_config_key, $cached_config, (int)env('APP_CACHE_TIME', 600));
-}
 
 /*
  * When debug = true the metadata cache should only last
@@ -193,6 +124,8 @@ Security::setSalt(Configure::consume('Security.salt'));
 
 /*
  * Setup detectors for mobile and tablet.
+ * If you don't use these checks you can safely remove this code
+ * and the mobiledetect package from composer.json.
  */
 ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
@@ -206,31 +139,27 @@ ServerRequest::addDetector('tablet', function ($request) {
 });
 
 /*
- * You can set whether the ORM uses immutable or mutable Time types.
- * The default changed in 4.0 to immutable types. You can uncomment
- * below to switch back to mutable types.
- *
  * You can enable default locale format parsing by adding calls
  * to `useLocaleParser()`. This enables the automatic conversion of
  * locale specific date formats. For details see
  * @link https://book.cakephp.org/4/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
  */
 // \Cake\Database\TypeFactory::build('time')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('date')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('datetime')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('timestamp')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('datetimefractional')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('timestampfractional')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('datetimetimezone')
-//    ->useMutable();
+//    ->useLocaleParser();
 // \Cake\Database\TypeFactory::build('timestamptimezone')
-//    ->useMutable();
+//    ->useLocaleParser();
 
 // There is no time-specific type in Cake
 TypeFactory::map('time', StringType::class);
